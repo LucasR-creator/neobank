@@ -1,0 +1,194 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar conta | NeoBank</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #F4EBDD;
+            color: #102824;
+        }
+
+        header {
+            background-color: #003B35;
+            color: white;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 450px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #003B35;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-top: 6px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 25px;
+            background-color: #003B35;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #DC8950;
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: wait;
+        }
+
+        .voltar {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #003B35;
+        }
+
+        #mensagem {
+            margin-top: 15px;
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>NeoBank</h1>
+        <p>Abra sua conta digital</p>
+    </header>
+
+    <main class="container">
+        <h2>Criar minha conta</h2>
+
+        <form id="formCadastro">
+            <label for="nome">Nome completo</label>
+            <input type="text" id="nome" name="nome" required>
+
+            <label for="email">E-mail</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="senha">Senha</label>
+            <input type="password" id="senha" name="senha"
+                   minlength="8" required>
+
+            <label for="confirmar">Confirmar senha</label>
+            <input type="password" id="confirmar" name="confirmar"
+                   minlength="8" required>
+
+            <button type="submit" id="botaoCadastro">
+                Criar conta
+            </button>
+        </form>
+
+        <p id="mensagem" role="status" aria-live="polite"></p>
+
+        <a class="voltar" href="index.html">
+            Voltar para o início
+        </a>
+    </main>
+
+    <script>
+        const formulario = document.getElementById("formCadastro");
+        const mensagem = document.getElementById("mensagem");
+        const botao = document.getElementById("botaoCadastro");
+
+        formulario.addEventListener("submit", async function(evento) {
+            evento.preventDefault();
+
+            const nome = document.getElementById("nome").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const senha = document.getElementById("senha").value;
+            const confirmar = document.getElementById("confirmar").value;
+
+            mensagem.textContent = "";
+
+            if (senha !== confirmar) {
+                mensagem.style.color = "red";
+                mensagem.textContent = "As senhas não coincidem.";
+                return;
+            }
+
+            botao.disabled = true;
+            botao.textContent = "Cadastrando...";
+
+            try {
+                const resposta = await fetch(
+                    "http://127.0.0.1:8000/clientes",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            nome: nome,
+                            email: email,
+                            senha: senha
+                        })
+                    }
+                );
+
+                const dados = await resposta.json();
+
+                if (!resposta.ok) {
+                    throw new Error(
+                        typeof dados.detail === "string"
+                            ? dados.detail
+                            : "Não foi possível cadastrar a conta."
+                    );
+                }
+
+                mensagem.style.color = "green";
+                mensagem.textContent = "Conta criada com sucesso!";
+                formulario.reset();
+
+            } catch (erro) {
+                mensagem.style.color = "red";
+                mensagem.textContent = erro.message;
+            } finally {
+                botao.disabled = false;
+                botao.textContent = "Criar conta";
+            }
+        });
+    </script>
+</body>
+</html>
+

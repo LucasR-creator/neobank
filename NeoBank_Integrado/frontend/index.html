@@ -1,0 +1,219 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>NeoBank | Seu banco digital</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #F4EBDD;
+            color: #102824;
+        }
+
+        header {
+            background: #003B35;
+            color: white;
+            padding: 25px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: #DC8950;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+        }
+
+        .hero {
+            padding: 90px 8%;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: clamp(36px, 6vw, 60px);
+            margin: 0 auto 20px;
+            max-width: 850px;
+        }
+
+        .hero p {
+            font-size: 19px;
+            line-height: 1.6;
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        .botoes {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .botao {
+            display: inline-block;
+            background: #DC8950;
+            color: #102824;
+            border: none;
+            padding: 16px 28px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .botao:hover {
+            background: #EBA36F;
+        }
+
+        .secundario {
+            background: #003B35;
+            color: white;
+        }
+
+        .secundario:hover {
+            background: #07574E;
+        }
+
+        .demonstracao {
+            padding: 30px 8% 100px;
+            text-align: center;
+        }
+
+        .demonstracao h2 {
+            font-size: 36px;
+            margin-bottom: 15px;
+        }
+
+        .demonstracao p {
+            font-size: 18px;
+            margin-bottom: 35px;
+        }
+
+        .painel {
+            max-width: 1200px;
+            margin: 0 auto;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0, 59, 53, 0.18);
+        }
+
+        .painel img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        footer {
+            background: #003B35;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 20px;
+                gap: 15px;
+                flex-wrap: wrap;
+            }
+
+            nav a {
+                margin-left: 10px;
+            }
+
+            .hero {
+                padding: 65px 20px;
+            }
+
+            .demonstracao {
+                padding: 20px 20px 70px;
+            }
+
+            .demonstracao h2 {
+                font-size: 27px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">Neo<span>Bank</span></div>
+
+        <nav>
+            <a href="#inicio">Início</a>
+            <a href="#demonstracao">Conheça o banco</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero" id="inicio">
+
+            <h1>Seu dinheiro. Seu futuro. Seu NeoBank.</h1>
+
+            <p>
+                Uma nova experiência de banco digital.
+                Tecnologia, praticidade e controle financeiro
+                em um só lugar.
+            </p>
+
+            <div class="botoes">
+                <a href="cadastro.html" class="botao">
+                    Criar minha conta
+                </a>
+
+                <a href="login.html" class="botao secundario">
+                    Entrar
+                </a>
+            </div>
+
+        </section>
+
+        <section class="demonstracao" id="demonstracao">
+
+            <h2>Conheça o NeoBank por dentro</h2>
+
+            <p>
+                Descubra como será sua experiência
+                com nosso banco digital.
+            </p>
+
+            <div class="painel">
+                <img
+                    src="Dashboard NeoBank Moderno em Português.png"
+                    alt="Demonstração do painel NeoBank com saldo, cartão e transações"
+                >
+            </div>
+
+        </section>
+    </main>
+
+    <footer>
+        NeoBank © 2026 — Projeto demonstrativo.
+        Nenhuma operação financeira real.
+    </footer>
+
+</body>
+</html>

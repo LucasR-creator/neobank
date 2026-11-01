@@ -1,0 +1,296 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Entrar na conta | NeoBank</title>
+
+    <style>
+        :root {
+            --verde: #003B35;
+            --escuro: #102824;
+            --creme: #F4EBDD;
+            --cobre: #DC8950;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: var(--creme);
+            font-family: Arial, sans-serif;
+            color: var(--escuro);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 430px;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0, 59, 53, 0.12);
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 32px;
+            font-weight: bold;
+            color: var(--verde);
+            margin-bottom: 10px;
+        }
+
+        .logo span {
+            color: var(--cobre);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 24px;
+            margin-top: 25px;
+        }
+
+        .subtitulo {
+            text-align: center;
+            color: #687570;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #d5dcd8;
+            border-radius: 10px;
+            font-size: 15px;
+            margin-bottom: 20px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--verde);
+        }
+
+        button {
+            width: 100%;
+            background: var(--verde);
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: var(--escuro);
+        }
+
+        button:disabled {
+            opacity: 0.65;
+            cursor: wait;
+        }
+
+        .mensagem {
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .erro {
+            color: #b42318;
+        }
+
+        .sucesso {
+            color: #137333;
+        }
+
+        .cadastro {
+            margin-top: 25px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        a {
+            color: var(--verde);
+            font-weight: bold;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="login-container">
+
+        <div class="logo">
+            Neo<span>Bank</span>
+        </div>
+
+        <h1>Bem-vindo de volta</h1>
+
+        <p class="subtitulo">
+            Entre na sua conta para acessar seu banco.
+        </p>
+
+        <form id="formLogin">
+
+            <label for="email">E-mail</label>
+
+            <input
+                type="email"
+                id="email"
+                placeholder="Digite seu e-mail"
+                autocomplete="username"
+                required
+            >
+
+            <label for="senha">Senha</label>
+
+            <input
+                type="password"
+                id="senha"
+                placeholder="Digite sua senha"
+                autocomplete="current-password"
+                required
+            >
+
+            <div
+                id="mensagem"
+                class="mensagem"
+                role="status"
+                aria-live="polite"
+            ></div>
+
+            <button type="submit" id="botaoEntrar">
+                Entrar na minha conta
+            </button>
+
+        </form>
+
+        <p class="cadastro">
+            Ainda não tem conta?
+            <a href="/cadastro.html">Criar conta</a>
+        </p>
+
+    </main>
+
+    <script>
+        // A API usa a mesma origem do site.
+        // Funciona tanto na porta 8001 quanto na 8000,
+        // desde que a página seja aberta pelo FastAPI.
+        const API = window.location.origin;
+
+        const formulario = document.getElementById("formLogin");
+        const mensagem = document.getElementById("mensagem");
+        const botao = document.getElementById("botaoEntrar");
+
+        function mostrarMensagem(texto, tipo) {
+            mensagem.textContent = texto;
+            mensagem.className = "mensagem " + tipo;
+        }
+
+        formulario.addEventListener("submit", async function (evento) {
+            evento.preventDefault();
+
+            const email = document.getElementById("email").value.trim();
+            const senha = document.getElementById("senha").value;
+
+            mostrarMensagem("", "");
+
+            botao.disabled = true;
+            botao.textContent = "Entrando...";
+
+            try {
+                const resposta = await fetch(API + "/login", {
+                    method: "POST",
+
+                    credentials: "same-origin",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        email: email,
+                        senha: senha
+                    })
+                });
+
+                // Lê a resposta como texto primeiro.
+                // Assim conseguimos identificar erros 500
+                // mesmo quando a API não retorna JSON.
+                const texto = await resposta.text();
+
+                let dados;
+
+                try {
+                    dados = JSON.parse(texto);
+                } catch {
+                    throw new Error(
+                        "Erro no servidor NeoBank (HTTP " +
+                        resposta.status +
+                        "). Consulte o terminal do FastAPI."
+                    );
+                }
+
+                if (!resposta.ok) {
+                    let detalhe = "Não foi possível entrar na conta.";
+
+                    if (typeof dados.detail === "string") {
+                        detalhe = dados.detail;
+                    }
+
+                    throw new Error(detalhe);
+                }
+
+                mostrarMensagem(
+                    "Login realizado! Abrindo sua conta...",
+                    "sucesso"
+                );
+
+                window.location.href = "/dashboard.html";
+
+            } catch (erro) {
+                console.error("Erro no login NeoBank:", erro);
+
+                if (erro instanceof TypeError) {
+                    mostrarMensagem(
+                        "Falha de comunicação com a API. " +
+                        "Confira se você abriu o NeoBank " +
+                        "pelo endereço do FastAPI.",
+                        "erro"
+                    );
+                } else {
+                    mostrarMensagem(
+                        erro.message || "Erro inesperado no login.",
+                        "erro"
+                    );
+                }
+
+            } finally {
+                botao.disabled = false;
+                botao.textContent = "Entrar na minha conta";
+            }
+        });
+    </script>
+
+</body>
+</html>

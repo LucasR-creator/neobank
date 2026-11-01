@@ -1,0 +1,1472 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | NeoBank</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --verde: #003B35;
+            --verde-escuro: #102824;
+            --cobre: #DC8950;
+            --creme: #F4EBDD;
+            --fundo: #f5f7f4;
+            --branco: #ffffff;
+            --texto: #18342f;
+            --cinza: #7b8b86;
+            --borda: #e7ebe8;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: var(--fundo);
+            color: var(--texto);
+            font-family: "DM Sans", Arial, sans-serif;
+            font-size: 14px;
+        }
+
+        button, input {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        h1, h2, h3 {
+            font-family: Manrope, sans-serif;
+        }
+
+        .app {
+            display: grid;
+            grid-template-columns: 250px minmax(0, 1fr);
+            min-height: 100vh;
+        }
+
+        /* MENU LATERAL */
+
+        .sidebar {
+            background: white;
+            border-right: 1px solid var(--borda);
+            padding: 30px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0 12px;
+            font-family: Manrope, sans-serif;
+            font-weight: 800;
+            font-size: 24px;
+        }
+
+        .logo-icon {
+            background: var(--verde);
+            color: white;
+            width: 36px;
+            height: 36px;
+            display: grid;
+            place-items: center;
+            border-radius: 10px;
+        }
+
+        .logo strong {
+            color: var(--verde);
+        }
+
+        .logo em {
+            color: var(--cobre);
+            font-style: normal;
+        }
+
+        .menu-titulo {
+            margin: 0 12px 12px;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 1.6px;
+            color: #a0aaa6;
+        }
+
+        .menu {
+            display: grid;
+            gap: 5px;
+        }
+
+        .menu a {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            padding: 13px 15px;
+            border-radius: 10px;
+            color: #667872;
+            font-weight: 700;
+            transition: 0.2s;
+        }
+
+        .menu a:hover,
+        .menu a.ativo {
+            background: #e9f2ed;
+            color: var(--verde);
+        }
+
+        .icone {
+            width: 22px;
+            font-size: 19px;
+            text-align: center;
+        }
+
+        .ajuda {
+            margin-top: auto;
+            background: #f1f5f0;
+            padding: 20px;
+            border-radius: 14px;
+        }
+
+        .ajuda h3 {
+            margin: 0 0 8px;
+            font-size: 14px;
+        }
+
+        .ajuda p {
+            color: var(--cinza);
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+        .ajuda a {
+            display: inline-block;
+            background: var(--verde);
+            color: white;
+            padding: 11px 14px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        /* TOPO */
+
+        .principal {
+            min-width: 0;
+        }
+
+        .topo {
+            height: 85px;
+            background: white;
+            border-bottom: 1px solid var(--borda);
+            padding: 0 38px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .caminho {
+            color: #89958f;
+            font-size: 12px;
+        }
+
+        .caminho strong {
+            color: var(--texto);
+        }
+
+        .topo-direita {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .pesquisa {
+            border: 1px solid var(--borda);
+            background: #f6f8f6;
+            border-radius: 10px;
+            padding: 11px 14px;
+            width: 230px;
+        }
+
+        .pesquisa input {
+            border: none;
+            background: transparent;
+            outline: none;
+            width: 100%;
+        }
+
+        .avatar {
+            background: #d9eee3;
+            color: var(--verde);
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            font-weight: 800;
+        }
+
+        .botao-sair {
+            background: white;
+            border: 1px solid var(--borda);
+            border-radius: 9px;
+            padding: 10px 13px;
+            color: var(--verde);
+            font-weight: 700;
+        }
+
+        .menu-mobile {
+            display: none;
+            border: 1px solid var(--borda);
+            background: white;
+            padding: 10px 13px;
+            border-radius: 9px;
+        }
+
+        /* CONTEÚDO */
+
+        .conteudo {
+            max-width: 1450px;
+            margin: auto;
+            padding: 36px 38px 60px;
+        }
+
+        .boas-vindas {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 27px;
+        }
+
+        .subtitulo {
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1.7px;
+            color: #82918a;
+        }
+
+        .boas-vindas h1 {
+            font-size: 30px;
+            margin: 8px 0;
+        }
+
+        .boas-vindas p {
+            color: var(--cinza);
+            margin: 0;
+        }
+
+        .data {
+            background: white;
+            border: 1px solid var(--borda);
+            border-radius: 10px;
+            padding: 12px 15px;
+            color: #667d72;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        /* SALDO E CARTÃO */
+
+        .grade-principal {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 22px;
+        }
+
+        .saldo-card {
+            background: linear-gradient(
+                120deg,
+                #003b35,
+                #09554b,
+                #176659
+            );
+            border-radius: 18px;
+            padding: 30px;
+            color: white;
+            min-height: 255px;
+        }
+
+        .saldo-topo {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .saldo-topo span {
+            color: #d0e7dd;
+            font-size: 13px;
+        }
+
+        .saldo-topo button {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 8px;
+            padding: 8px 12px;
+        }
+
+        .valor-saldo {
+            font: 800 clamp(28px, 4vw, 43px) Manrope, sans-serif;
+            margin: 30px 0 8px;
+        }
+
+        .descricao-saldo {
+            color: #c6e0d5;
+            font-size: 12px;
+        }
+
+        .saldo-resumo {
+            display: flex;
+            gap: 35px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            margin-top: 28px;
+            padding-top: 18px;
+        }
+
+        .saldo-resumo small {
+            display: block;
+            color: #c5e0d6;
+            margin-bottom: 7px;
+        }
+
+        .saldo-resumo strong {
+            font-weight: 800;
+        }
+
+        .entrada {
+            color: #a9f1c7;
+        }
+
+        .cartao-area {
+            background: white;
+            border: 1px solid var(--borda);
+            border-radius: 18px;
+            padding: 23px;
+        }
+
+        .cabecalho-card,
+        .painel-topo {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cabecalho-card h3 {
+            margin: 0 0 16px;
+            font-size: 15px;
+        }
+
+        .link {
+            color: var(--verde);
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .cartao-virtual {
+            background: linear-gradient(120deg, #123f38, #071f1d);
+            border-radius: 14px;
+            color: white;
+            padding: 20px 23px;
+            min-height: 171px;
+        }
+
+        .cartao-marca {
+            display: flex;
+            justify-content: space-between;
+            font: 800 18px Manrope, sans-serif;
+        }
+
+        .cartao-marca em {
+            color: var(--cobre);
+            font-style: normal;
+        }
+
+        .chip {
+            margin-top: 18px;
+            width: 34px;
+            height: 25px;
+            border-radius: 5px;
+            background: linear-gradient(120deg, #d3b786, #f7e4b8);
+        }
+
+        .numero-cartao {
+            letter-spacing: 3px;
+            margin: 17px 0;
+        }
+
+        .dados-cartao {
+            display: flex;
+            justify-content: space-between;
+            font-size: 10px;
+            color: #c9d9d3;
+        }
+
+        .dados-cartao strong {
+            display: block;
+            margin-top: 5px;
+            color: white;
+            font-size: 11px;
+        }
+
+        .aviso-cartao {
+            color: #8b9891;
+            font-size: 11px;
+        }
+
+        /* ACESSO RÁPIDO */
+
+        .titulo-secao {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 30px 0 17px;
+        }
+
+        .titulo-secao h2 {
+            font-size: 18px;
+            margin: 0;
+        }
+
+        .acessos {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .acesso {
+            background: white;
+            border: 1px solid var(--borda);
+            border-radius: 14px;
+            padding: 19px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            min-height: 82px;
+            transition: 0.2s;
+        }
+
+        .acesso:hover {
+            transform: translateY(-2px);
+            border-color: #b7d4c7;
+        }
+
+        .acesso-icone {
+            background: #eaf3ee;
+            color: var(--verde);
+            width: 43px;
+            height: 43px;
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+            font-size: 21px;
+        }
+
+        .acesso strong {
+            display: block;
+        }
+
+        .acesso small {
+            display: block;
+            color: #9ba6a0;
+            margin-top: 5px;
+        }
+
+        /* RESUMO FINANCEIRO */
+
+        .grade-inferior {
+            display: grid;
+            grid-template-columns: 1.35fr 1fr;
+            gap: 22px;
+            margin-top: 26px;
+        }
+
+        .painel {
+            background: white;
+            border: 1px solid var(--borda);
+            border-radius: 17px;
+            padding: 24px;
+        }
+
+        .painel-topo h3 {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .painel-topo p {
+            color: #9aa6a0;
+            font-size: 11px;
+        }
+
+        .resumo-valores {
+            display: flex;
+            gap: 30px;
+            margin: 25px 0;
+        }
+
+        .resumo-valores small {
+            display: block;
+            color: #9da9a2;
+            margin-bottom: 7px;
+        }
+
+        .resumo-valores strong {
+            font: 800 20px Manrope, sans-serif;
+        }
+
+        .grafico {
+            width: 100%;
+            height: 176px;
+        }
+
+        .grafico-meses {
+            display: flex;
+            justify-content: space-between;
+            color: #9ba9a2;
+            font-size: 10px;
+        }
+
+        .movimentacao {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 0;
+            border-bottom: 1px solid #f0f2ef;
+        }
+
+        .mov-icone {
+            width: 39px;
+            height: 39px;
+            background: #edf4ee;
+            color: #22594c;
+            border-radius: 11px;
+            display: grid;
+            place-items: center;
+            font-size: 19px;
+        }
+
+        .mov-info {
+            flex: 1;
+        }
+
+        .mov-info strong {
+            display: block;
+            font-size: 12px;
+        }
+
+        .mov-info small {
+            display: block;
+            color: #9ba7a0;
+            margin-top: 5px;
+        }
+
+        .mov-valor {
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .positivo {
+            color: #17815b;
+        }
+
+        .rodape {
+            margin-top: 25px;
+            color: #8a9890;
+            font-size: 11px;
+            line-height: 1.7;
+        }
+
+        .mensagem {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: var(--verde-escuro);
+            color: white;
+            padding: 14px 19px;
+            border-radius: 11px;
+            display: none;
+            z-index: 100;
+        }
+
+        .mensagem.visivel {
+            display: block;
+        }
+
+        /* RESPONSIVIDADE */
+
+        @media (max-width: 1200px) {
+            .acessos {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 1050px) {
+            .grade-principal,
+            .grade-inferior {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 800px) {
+            .app {
+                display: block;
+            }
+
+            .sidebar {
+                display: none;
+                position: fixed;
+                top: 65px;
+                left: 0;
+                bottom: 0;
+                width: 270px;
+                z-index: 90;
+                overflow-y: auto;
+                box-shadow: 12px 0 30px rgba(0,0,0,0.12);
+            }
+
+            .sidebar.aberta {
+                display: flex;
+            }
+
+            .menu-mobile {
+                display: block;
+            }
+
+            .topo {
+                height: 65px;
+                padding: 0 18px;
+            }
+
+            .caminho,
+            .pesquisa,
+            .data {
+                display: none;
+            }
+
+            .conteudo {
+                padding: 25px 17px 45px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .acesso {
+                padding: 12px;
+                gap: 10px;
+            }
+
+            .acesso-icone {
+                width: 35px;
+                height: 35px;
+            }
+
+            .saldo-card {
+                padding: 24px;
+            }
+
+            .saldo-resumo {
+                gap: 15px;
+            }
+
+            .painel {
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- MENU LATERAL -->
+
+    <aside class="sidebar" id="sidebar">
+
+        <a class="logo" href="dashboard.html">
+            <div class="logo-icon">N</div>
+            <strong>Neo<em>Bank</em></strong>
+        </a>
+
+        <div>
+            <p class="menu-titulo">MENU PRINCIPAL</p>
+
+            <nav class="menu">
+                <a class="ativo" href="dashboard.html">
+                    <span class="icone">⌂</span>
+                    Visão geral
+                </a>
+
+                <a href="pix.html">
+                    <span class="icone">⇄</span>
+                    Pix e transferências
+                </a>
+
+                <a href="cartoes.html">
+                    <span class="icone">▣</span>
+                    Meus cartões
+                </a>
+
+                <a href="extrato.html">
+                    <span class="icone">≡</span>
+                    Extrato
+                </a>
+
+                <a href="investimentos.html">
+                    <span class="icone">↗</span>
+                    Investimentos
+                </a>
+
+                <a href="pagamentos.html">
+                    <span class="icone">▤</span>
+                    Pagamentos
+                </a>
+            </nav>
+        </div>
+
+        <div>
+            <p class="menu-titulo">PREFERÊNCIAS</p>
+
+            <nav class="menu">
+                <a href="configuracoes.html">
+                    <span class="icone">⚙</span>
+                    Configurações
+                </a>
+
+                <a href="suporte.html">
+                    <span class="icone">?</span>
+                    Central de ajuda
+                </a>
+            </nav>
+        </div>
+
+        <div class="ajuda">
+            <h3>Precisa de ajuda?</h3>
+            <p>
+                Acesse nossa central para consultar
+                dúvidas e informações sobre o NeoBank.
+            </p>
+            <a href="suporte.html">Acessar suporte</a>
+        </div>
+
+    </aside>
+
+    <!-- ÁREA PRINCIPAL -->
+
+    <div class="principal">
+
+        <header class="topo">
+
+            <button
+                class="menu-mobile"
+                id="menuMobile"
+                type="button"
+                aria-label="Abrir menu"
+                aria-expanded="false"
+            >
+                ☰
+            </button>
+
+            <div class="caminho">
+                Minha conta / <strong>Visão geral</strong>
+            </div>
+
+            <div class="topo-direita">
+
+                <label class="pesquisa">
+                    <input
+                        type="search"
+                        id="pesquisa"
+                        placeholder="Buscar no NeoBank..."
+                    >
+                </label>
+
+                <div class="avatar" id="avatar">...</div>
+
+                <button class="botao-sair" id="logout" type="button">
+                    Sair
+                </button>
+
+            </div>
+        </header>
+
+        <main class="conteudo">
+
+            <!-- BOAS-VINDAS -->
+
+            <section class="boas-vindas">
+                <div>
+                    <div class="subtitulo">
+                        SEU ESPAÇO FINANCEIRO
+                    </div>
+
+                    <h1>
+                        Olá, <span id="nomeCliente">cliente</span>!
+                        <span style="color: var(--cobre)">✦</span>
+                    </h1>
+
+                    <p>
+                        Acompanhe sua conta e acesse os serviços do NeoBank.
+                    </p>
+                </div>
+
+                <div class="data" id="dataAtual">
+                    Carregando data...
+                </div>
+            </section>
+
+            <!-- SALDO E CARTÃO -->
+
+            <div class="grade-principal">
+
+                <section class="saldo-card">
+
+                    <div class="saldo-topo">
+                        <span>Saldo total disponível · CONTA SIMULADA</span>
+
+                        <button id="toggleSaldo" type="button">
+                            Ocultar
+                        </button>
+                    </div>
+
+                    <div class="valor-saldo" id="saldo">
+                        Carregando saldo...
+                    </div>
+
+                    <div class="descricao-saldo">
+                        Saldo consultado no PostgreSQL · Sem dinheiro real
+                    </div>
+
+                    <div class="saldo-resumo">
+
+                        <div>
+                            <small>Entradas do mês · Exemplo</small>
+                            <strong class="entrada" id="entradas">
+                                + R$ 0,00
+                            </strong>
+                        </div>
+
+                        <div>
+                            <small>Saídas do mês · Exemplo</small>
+                            <strong id="saidas">
+                                − R$ 0,00
+                            </strong>
+                        </div>
+
+                    </div>
+                </section>
+
+                <section class="cartao-area">
+
+                    <div class="cabecalho-card">
+                        <h3>Meu cartão virtual</h3>
+                        <a class="link" href="cartoes.html">
+                            Ver detalhes ↗
+                        </a>
+                    </div>
+
+                    <div class="cartao-virtual">
+
+                        <div class="cartao-marca">
+                            <div>Neo<em>Bank</em></div>
+                            <span>◈</span>
+                        </div>
+
+                        <div class="chip"></div>
+
+                        <div class="numero-cartao">
+                            •••• •••• •••• 4829
+                        </div>
+
+                        <div class="dados-cartao">
+
+                            <div>
+                                TITULAR DA CONTA
+                                <strong id="titularCartao">
+                                    CARREGANDO...
+                                </strong>
+                            </div>
+
+                            <div>
+                                VALIDADE
+                                <strong>••/••</strong>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <p class="aviso-cartao">
+                        Cartão ilustrativo · Sem dados bancários reais
+                    </p>
+
+                </section>
+
+            </div>
+
+            <!-- ACESSO RÁPIDO -->
+
+            <div class="titulo-secao">
+                <h2>Acesso rápido</h2>
+
+                <a class="link" href="pagamentos.html">
+                    Ver serviços ↗
+                </a>
+            </div>
+
+            <section class="acessos">
+
+                <a class="acesso" href="pix.html">
+                    <div class="acesso-icone">◇</div>
+                    <div>
+                        <strong>Pix</strong>
+                        <small>Enviar e receber</small>
+                    </div>
+                </a>
+
+                <a class="acesso" href="pix.html">
+                    <div class="acesso-icone">⇄</div>
+                    <div>
+                        <strong>Transferir</strong>
+                        <small>Entre contas</small>
+                    </div>
+                </a>
+
+                <a class="acesso" href="pagamentos.html">
+                    <div class="acesso-icone">▤</div>
+                    <div>
+                        <strong>Pagar</strong>
+                        <small>Contas e boletos</small>
+                    </div>
+                </a>
+
+                <a class="acesso" href="investimentos.html">
+                    <div class="acesso-icone">↗</div>
+                    <div>
+                        <strong>Investir</strong>
+                        <small>Conhecer opções</small>
+                    </div>
+                </a>
+
+            </section>
+
+            <!-- RESUMO FINANCEIRO -->
+
+            <div class="grade-inferior">
+
+                <section class="painel">
+
+                    <div class="painel-topo">
+                        <div>
+                            <h3>Resumo financeiro</h3>
+                            <p>Entradas e saídas simuladas</p>
+                        </div>
+
+                        <a class="link" href="extrato.html">
+                            Extrato ↗
+                        </a>
+                    </div>
+
+                    <div class="resumo-valores">
+
+                        <div>
+                            <small>● Entradas</small>
+                            <strong>R$ 0,00</strong>
+                        </div>
+
+                        <div>
+                            <small>● Saídas</small>
+                            <strong>R$ 0,00</strong>
+                        </div>
+
+                    </div>
+
+                    <svg
+                        class="grafico"
+                        viewBox="0 0 560 176"
+                        preserveAspectRatio="none"
+                        role="img"
+                        aria-label="Gráfico demonstrativo"
+                    >
+                        <g stroke="#eef1ed" stroke-width="1">
+                            <path d="M0 25H560 M0 70H560 M0 115H560 M0 160H560"/>
+                        </g>
+
+                        <path
+                            d="M5 123 C52 110 70 118 112 86 S188 106 224 75 S300 88 336 48 S407 74 448 42 S520 47 555 20"
+                            stroke="#0e725f"
+                            stroke-width="3.5"
+                            fill="none"
+                        />
+
+                        <path
+                            d="M5 142 C56 139 79 117 112 130 S190 111 224 123 S294 103 336 117 S407 99 448 110 S522 93 555 95"
+                            stroke="#e3a16c"
+                            stroke-width="3"
+                            fill="none"
+                        />
+                    </svg>
+
+                    <div class="grafico-meses">
+                        <span>Mai</span>
+                        <span>Jun</span>
+                        <span>Jul</span>
+                        <span>Ago</span>
+                        <span>Set</span>
+                        <span>Out</span>
+                    </div>
+
+                </section>
+
+                <!-- MOVIMENTAÇÕES -->
+
+                <section class="painel">
+
+                    <div class="painel-topo">
+                        <div>
+                            <h3>Últimas movimentações</h3>
+                            <p>Exemplos demonstrativos</p>
+                        </div>
+
+                        <a class="link" href="extrato.html">
+                            Ver tudo ↗
+                        </a>
+                    </div>
+
+                    <div class="movimentacao">
+                        <div class="mov-icone">↙</div>
+                        <div class="mov-info">
+                            <strong>Transferência recebida</strong>
+                            <small>Exemplo de entrada</small>
+                        </div>
+                        <div class="mov-valor positivo">
+                            + R$ 850,00
+                        </div>
+                    </div>
+
+                    <div class="movimentacao">
+                        <div class="mov-icone">↗</div>
+                        <div class="mov-info">
+                            <strong>Pagamento de serviço</strong>
+                            <small>Exemplo de saída</small>
+                        </div>
+                        <div class="mov-valor">
+                            − R$ 129,90
+                        </div>
+                    </div>
+
+                    <div class="movimentacao">
+                        <div class="mov-icone">▣</div>
+                        <div class="mov-info">
+                            <strong>Compra com cartão</strong>
+                            <small>Exemplo de compra</small>
+                        </div>
+                        <div class="mov-valor">
+                            − R$ 78,50
+                        </div>
+                    </div>
+
+                    <div class="movimentacao">
+                        <div class="mov-icone">↙</div>
+                        <div class="mov-info">
+                            <strong>Depósito recebido</strong>
+                            <small>Exemplo de depósito</small>
+                        </div>
+                        <div class="mov-valor positivo">
+                            + R$ 1.250,00
+                        </div>
+                    </div>
+
+                </section>
+
+            </div>
+
+            <p class="rodape">
+                O NeoBank é um projeto educacional de banco digital fictício.
+                As operações são simuladas e não movimentam dinheiro real.
+                O gráfico, cartão e movimentações desta página ainda são
+                demonstrativos.
+            </p>
+
+        </main>
+    </div>
+</div>
+
+<div
+    class="mensagem"
+    id="mensagem"
+    role="status"
+    aria-live="polite"
+></div>
+
+<script>
+
+    // ==========================================
+    // 1. DATA ATUAL
+    // ==========================================
+
+    const dataAtual = new Date();
+
+    document.getElementById("dataAtual").textContent =
+        new Intl.DateTimeFormat("pt-BR", {
+            month: "long",
+            year: "numeric"
+        }).format(dataAtual);
+
+
+  // 2. SALDO AUTENTICADO
+  let saldoVisivel = true;
+  let saldoAtual = null;
+  let saldoErro = false;
+  const botaoSaldo = document.getElementById('toggleSaldo');
+  function atualizarSaldoNaTela() {
+    const elemento = document.getElementById('saldo');
+    elemento.textContent = !saldoVisivel ? 'R$ ••••••' : saldoErro ? 'Saldo indisponível' : saldoAtual === null ? 'Carregando saldo...' : saldoAtual.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+    botaoSaldo.textContent = saldoVisivel ? 'Ocultar' : 'Mostrar';
+    for (const id of ['entradas','saidas']) {
+      const el=document.getElementById(id);
+      if(el)el.style.filter=saldoVisivel?'':'blur(7px)';
+    }
+  }
+  botaoSaldo.addEventListener('click',()=>{saldoVisivel=!saldoVisivel;atualizarSaldoNaTela()});
+  async function carregarResumo(){
+    try {
+      const r=await fetch('/api/resumo',{credentials:'same-origin',cache:'no-store'});
+      if(r.status===401){location.replace('/login.html');return}
+      if(!r.ok)throw Error('Não foi possível consultar a conta.');
+      const d=await r.json();
+      saldoAtual=Number(d.saldo);saldoErro=false;
+      document.getElementById('entradas').textContent='+ '+Number(d.entradas).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+      document.getElementById('saidas').textContent='− '+Number(d.saidas).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+      atualizarSaldoNaTela();
+      const painel=Array.from(document.querySelectorAll('.painel')).find(x=>x.querySelector('h3')?.textContent.includes('Últimas movimentações'));
+      if(painel){
+        painel.querySelectorAll('.movimentacao').forEach(x=>x.remove());
+        const titulo=painel.querySelector('.painel-topo p');if(titulo)titulo.textContent='Registros da sua conta fictícia';
+        if(!d.movimentos.length){const e=document.createElement('p');e.className='aviso-cartao';e.textContent='Nenhuma movimentação registrada.';painel.append(e)}
+        for(const m of d.movimentos){const e=document.createElement('div');e.className='movimentacao';const a=document.createElement('div');a.className='mov-icone';a.textContent=m.tipo==='entrada'?'↙':'↗';const b=document.createElement('div');b.className='mov-info';const strong=document.createElement('strong');strong.textContent=m.descricao;const small=document.createElement('small');small.textContent=new Date(m.criado_em).toLocaleString('pt-BR');b.append(strong,small);const c=document.createElement('div');c.className='mov-valor'+(m.tipo==='entrada'?' positivo':'');c.textContent=(m.tipo==='entrada'?'+ ':'− ')+Number(m.valor).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});e.append(a,b,c);painel.append(e)}
+      }
+    } catch(err){console.error(err);saldoErro=true;atualizarSaldoNaTela();mostrarMensagem('Não foi possível carregar o saldo. Confira o servidor e o banco.')}
+  }
+
+    // ==========================================
+    // 3. MENU PARA CELULAR
+    // ==========================================
+
+    const menuMobile = document.getElementById("menuMobile");
+
+    const sidebar = document.getElementById("sidebar");
+
+    menuMobile.addEventListener("click", function () {
+
+        const aberto = sidebar.classList.toggle("aberta");
+
+        menuMobile.setAttribute(
+            "aria-expanded",
+            String(aberto)
+        );
+
+    });
+
+    document.addEventListener("click", function (evento) {
+
+        if (
+            sidebar.classList.contains("aberta") &&
+            !sidebar.contains(evento.target) &&
+            !menuMobile.contains(evento.target)
+        ) {
+
+            sidebar.classList.remove("aberta");
+
+            menuMobile.setAttribute("aria-expanded", "false");
+        }
+
+    });
+
+
+    // ==========================================
+    // 4. MENSAGENS
+    // ==========================================
+
+    let temporizadorMensagem;
+
+    function mostrarMensagem(texto) {
+
+        const elemento = document.getElementById("mensagem");
+
+        elemento.textContent = texto;
+
+        elemento.classList.add("visivel");
+
+        clearTimeout(temporizadorMensagem);
+
+        temporizadorMensagem = setTimeout(function () {
+
+            elemento.classList.remove("visivel");
+
+        }, 4000);
+
+    }
+
+
+    // ==========================================
+    // 5. BUSCAR SERVIÇOS
+    // ==========================================
+
+    const pesquisa = document.getElementById("pesquisa");
+
+    const servicos = {
+        "pix": "pix.html",
+        "transferencia": "pix.html",
+        "cartao": "cartoes.html",
+        "extrato": "extrato.html",
+        "investimento": "investimentos.html",
+        "pagamento": "pagamentos.html",
+        "boleto": "pagamentos.html",
+        "suporte": "suporte.html",
+        "ajuda": "suporte.html",
+        "configuracoes": "configuracoes.html"
+    };
+
+    function normalizarTexto(texto) {
+
+        return texto
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .trim();
+    }
+
+    pesquisa.addEventListener("keydown", function (evento) {
+
+        if (evento.key !== "Enter") {
+            return;
+        }
+
+        evento.preventDefault();
+
+        const termo = normalizarTexto(pesquisa.value);
+
+        if (!termo) {
+            mostrarMensagem("Digite o nome de um serviço.");
+            return;
+        }
+
+        const encontrado = Object.entries(servicos).find(
+            ([nome]) => nome.includes(termo)
+        );
+
+        if (encontrado) {
+
+            window.location.href = encontrado[1];
+
+        } else {
+
+            mostrarMensagem("Serviço não encontrado.");
+        }
+
+    });
+
+
+    // ==========================================
+    // 6. CARREGAR CLIENTE DO FASTAPI
+    // ==========================================
+
+    async function carregarCliente() {
+
+        try {
+
+            const resposta = await fetch("/clientes/me", {
+                method: "GET",
+                credentials: "same-origin",
+                cache: "no-store"
+            });
+
+            if (resposta.status === 401) {
+
+                window.location.replace("/login.html");
+
+                return;
+            }
+
+            if (!resposta.ok) {
+
+                throw new Error(
+                    "Não foi possível carregar o cliente."
+                );
+            }
+
+            const dados = await resposta.json();
+
+            const nome = typeof dados.nome === "string"
+                ? dados.nome.trim()
+                : "";
+
+            if (!nome) {
+
+                throw new Error(
+                    "Nome do cliente não encontrado."
+                );
+            }
+
+            const primeiroNome = nome.split(/\s+/)[0];
+
+            document.getElementById("nomeCliente").textContent =
+                primeiroNome;
+
+            document.getElementById("titularCartao").textContent =
+                nome.toLocaleUpperCase("pt-BR");
+
+            const iniciais = nome
+                .split(/\s+/)
+                .slice(0, 2)
+                .map(parte => parte[0])
+                .join("")
+                .toLocaleUpperCase("pt-BR");
+
+            document.getElementById("avatar").textContent =
+                iniciais;
+
+        } catch (erro) {
+
+            console.error("Erro ao carregar cliente:", erro);
+
+            mostrarMensagem(
+                erro.message || "Erro ao carregar cliente."
+            );
+        }
+
+    }
+
+
+    // ==========================================
+    // 7. CONSULTAR SALDO NO POSTGRESQL
+    // ==========================================
+
+    async function carregarSaldo() {
+
+        try {
+
+            const resposta = await fetch("/conta/saldo", {
+                method: "GET",
+                credentials: "same-origin",
+                cache: "no-store"
+            });
+
+            if (resposta.status === 401) {
+
+                window.location.replace("/login.html");
+
+                return;
+            }
+
+            if (!resposta.ok) {
+
+                throw new Error(
+                    "Não foi possível consultar o saldo."
+                );
+            }
+
+            const dados = await resposta.json();
+
+            const valor = Number(dados.saldo);
+
+            if (!Number.isFinite(valor)) {
+
+                throw new Error(
+                    "O servidor retornou um saldo inválido."
+                );
+            }
+
+            saldoAtual = valor;
+
+            atualizarSaldoNaTela();
+
+        } catch (erro) {
+
+            console.error("Erro ao carregar saldo:", erro);
+
+            saldoAtual = null;
+
+            if (saldoVisivel) {
+
+                document.getElementById("saldo").textContent =
+                    "Saldo indisponível";
+            }
+
+            mostrarMensagem(
+                "Não foi possível consultar seu saldo."
+            );
+        }
+
+    }
+
+
+    // ==========================================
+    // 8. ENCERRAR SESSÃO
+    // ==========================================
+
+    document.getElementById("logout").addEventListener(
+        "click",
+        async function () {
+
+            const botao = document.getElementById("logout");
+
+            botao.disabled = true;
+
+            try {
+
+                const resposta = await fetch("/logout", {
+                    method: "POST",
+                    credentials: "same-origin"
+                });
+
+                if (!resposta.ok) {
+
+                    throw new Error(
+                        "Não foi possível sair da conta."
+                    );
+                }
+
+                window.location.replace("/login.html");
+
+            } catch (erro) {
+
+                mostrarMensagem(
+                    erro.message || "Erro ao encerrar sessão."
+                );
+
+                botao.disabled = false;
+            }
+
+        }
+    );
+
+
+    // ==========================================
+    // 9. INICIAR DASHBOARD
+    // ==========================================
+
+    carregarCliente();
+  carregarResumo();
+
+    carregarSaldo();
+
+</script>
+
+</body>
+</html>
